@@ -5,6 +5,7 @@ import Login from "./Login";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Typography, Box } from "@mui/material";
 import SignUp from "./Signup";
+import SocialLogin from "./SocialLogin";
 
 function Copyright() {
     return (
@@ -22,6 +23,7 @@ function AppRouter() {
                     <Route path="/" element={<App />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<SignUp />} />
+                    <Route path="/sociallogin" element={<SocialLogin />} />
                 </Routes>
             </BrowserRouter>
             <Box mt={5}>

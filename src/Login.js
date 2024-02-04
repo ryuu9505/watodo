@@ -1,5 +1,5 @@
 import React from "react";
-import { signin } from "./service/ApiService";
+import { signin, socialLogin } from "./service/ApiService";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
@@ -11,6 +11,8 @@ function Login() {
         const password = data.get("password");
         signin({ username: username, password: password });
     };
+
+    const handlerSocialLogin = (provider) => { socialLogin(provider); }
 
     return (
         <Container component="main" maxWidth="xs" style={{ marginTop: "8%" }}>
@@ -34,6 +36,11 @@ function Login() {
                     <Grid item xs={12}>
                         <Button type="submit" fullWidth variant="contained" color="primary">
                             Login
+                        </Button>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button onClick={() => handlerSocialLogin("kakao")} fullWidth variant="contained" style={{backgroundColor: '#000'}}>
+                            Kakao Login
                         </Button>
                     </Grid>
                     <Grid item>
