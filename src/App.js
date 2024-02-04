@@ -1,46 +1,22 @@
 import logo from './logo.svg';
 import Todo from './Todo';
 import AddTodo from './AddTodo';
+import Loading from './Loading';
 import './App.css';
 import { useState, useEffect } from 'react';
-import { Container, List, Paper } from '@mui/material';
-import { call } from './service/ApiService';
+import { Container, List, Paper, AppBar, Grid, Button, Toolbar, Typography } from '@mui/material';
+import { call, signout } from './service/ApiService';
 
 function App() {
-  const [items, setItems] = useState([
-    // {
-    //   id: "0",
-    //   title: "Hello World 1",
-    //   done: true
-    // },
-    // {
-    //   id: "1",
-    //   title: "Hello World 2",
-    //   done: false
-    // }
-  ]); 
-  
-  // useEffect(() => {
-  //   const requestOptions = {
-  //     method: "GET",
-  //     headeres: {"Content-Type": "application/json"},
-  //   }
-
-  //   fetch("http://localhost:8080/todo", requestOptions)
-  //   .then((response) => response.json())
-  //   .then(
-  //     (response) => {
-  //       setItems(response.data);
-  //     },
-  //     (error) => {
-
-  //     }
-  //   )
-  // }, []);
+  const [items, setItems] = useState([]); 
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     call("/todo", "GET", null)
-    .then((response) => setItems(response.data));
+    .then((response) => {
+      setItems(response.data);
+      setLoading(false);
+    });
   }, []);
 
   const addItem = (item) => {
@@ -69,14 +45,40 @@ function App() {
     </Paper>
   );
 
-  return (
-    <div className="App">
+  let navigationBar = (
+    <AppBar position="static">
+      <Toolbar>
+        <Grid justifyContent="space-between" container>
+          <Grid item>
+            <Typography variant='h6'>To-do List</Typography>
+          </Grid>
+          <Grid item>
+            <Button color='inherit' raised onClick={signout}>
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
+      </Toolbar>
+    </AppBar>
+  );
+
+  let todoListPage = (
+    <div>
+      {navigationBar}
       <Container maxWidth="md">
         <AddTodo addItem={addItem} />
         <div className='TodoList'>{todoItems}</div>
       </Container>
     </div>
   );
+
+  let content = <Loading />;
+
+  if (!loading) {
+    content = todoListPage;
+  }
+
+  return <div className="App">{content}</div>;
 }
 
 export default App;
